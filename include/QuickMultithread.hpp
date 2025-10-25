@@ -5,6 +5,7 @@
 #define WINDOW_SIZE_FLOAT 800.f
 
 #include <atomic>
+#include <functional>
 #include <thread>
 #include <vector>
 
@@ -14,14 +15,15 @@ class QuickMultithread {
 private:
     int partition(int *arr, int lowerBoundary, int upperBoundary);
     void quicksort(int *arr, int lowerBoundary, int upperBoundary);
-    void delayFunction();
-    std::vector<std::thread> threads = {};
+    std::function<void()> delayFunction;
     std::atomic<int> threadCounter = 0;
-    int maxThreads = 10;
+    int maxThreads = 100;
     void drawPlot(int *arr, int size);
     void updatePlot(int *arr, int size, sf::RenderWindow &w, int &max);
     bool sortingFinished = false;
+    void config(bool slow);
 public:
+    QuickMultithread(bool visualization);
     void sort(int *arr, int size);
 };
 

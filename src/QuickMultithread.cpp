@@ -4,6 +4,7 @@
 
 void QuickMultithread::sort(int *arr, int size) {
     std::thread renderThread(&QuickMultithread::drawPlot, this, arr, size);
+    threadCounter.fetch_add(1);
     quicksort(arr, 0, size - 1);
     // for (auto& t: threads) {
     //     if (t.joinable()) {
@@ -16,15 +17,17 @@ void QuickMultithread::sort(int *arr, int size) {
 
 void QuickMultithread::quicksort(int *arr, int lowerBoundary, int upperBoundary) {
     std::cout << "Thread " << threadCounter.load() << " started\n";
-    threadCounter.fetch_add(1);
     if (lowerBoundary >= upperBoundary) return;
     int pivotIndex = partition(arr, lowerBoundary, upperBoundary);
     if (threadCounter.load() < maxThreads) {
-        std::thread left(&QuickMultithread::quicksort, this, arr, lowerBoundary, pivotIndex - 1);
+        std::thread left([this, arr, lowerBoundary, pivotIndex]() {
+            threadCounter.fetch_add(1);
+            quicksort(arr, lowerBoundary, pivotIndex - 1);
+            threadCounter.fetch_sub(1); // decrement when done
+        });
+        quicksort(arr, pivotIndex + 1, upperBoundary);
         left.join();
         std::cout << "Thread " << threadCounter.load() << " finished\n";
-        threadCounter.fetch_sub(1);
-        quicksort(arr, pivotIndex + 1, upperBoundary);
     } else {
         quicksort(arr, lowerBoundary, pivotIndex - 1);
         quicksort(arr, pivotIndex + 1, upperBoundary);
@@ -50,10 +53,6 @@ int QuickMultithread::partition(int *arr, int lowerBoundary, int upperBoundary) 
     return pivot;
 }
 
-void QuickMultithread::delayFunction() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-}
-
 void QuickMultithread::drawPlot(int *arr, int size){
     sf::RenderWindow window{sf::VideoMode({WINDOW_SIZE, WINDOW_SIZE}), "Sorting Algorithm"};
     int max = *std::max_element(arr, arr + size);
@@ -61,7 +60,7 @@ void QuickMultithread::drawPlot(int *arr, int size){
         if (sortingFinished) window.close();
         updatePlot(arr, size, window, max);
         window.display();
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 
 }
@@ -79,6 +78,20 @@ void QuickMultithread::updatePlot (int *arr, int size, sf::RenderWindow &window,
         rectangle.setFillColor(sf::Color(2, 48, 32));
         window.draw(rectangle);
     }
+}
+
+void QuickMultithread::config(bool slow) {
+    if (slow) {
+        delayFunction = []() {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        };
+    } else {
+        delayFunction = []() {};
+    }
+}
+
+QuickMultithread::QuickMultithread(bool visualization) {
+    config(visualization);
 }
 
 
