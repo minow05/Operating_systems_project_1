@@ -26,9 +26,7 @@ FetchContent_MakeAvailable(SFML googletest)
 add_executable(Operating_systems_project_1
         src/main.cpp
         src/Quick.cpp
-        include/Algorithms/SortingAlgorithm.h
-        include/UI/Button.h
-        include/Algorithms/QuickMultithread.hpp
+        include/QuickMultithread.hpp
         src/QuickMultithread.cpp
 )
 
@@ -42,7 +40,7 @@ add_executable(tests
         tests/test_sizeOneArray.cpp
         src/Quick.cpp
         tests/test_DataGeneration.cpp
-        include/Algorithms/QuickMultithread.hpp
+        include/QuickMultithread.hpp
         src/QuickMultithread.cpp
 )
 
