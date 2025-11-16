@@ -5,18 +5,17 @@
 void QuickMultithread::sort(int *arr, int size) {
     std::thread renderThread(&QuickMultithread::drawPlot, this, arr, size);
     threadCounter.fetch_add(1);
+    auto start = std::chrono::high_resolution_clock::now();
     quicksort(arr, 0, size - 1);
-    // for (auto& t: threads) {
-    //     if (t.joinable()) {
-    //         t.join();
-    //     }
-    // }
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = stop - start;
+    std::cout << "time = " << static_cast<float>(duration.count())/1000.0 << '\n';
     sortingFinished = true;
     renderThread.join();
 }
 
 void QuickMultithread::quicksort(int *arr, int lowerBoundary, int upperBoundary) {
-    std::cout << "Thread " << threadCounter.load() << " started\n";
+//    std::cout << "Thread " << threadCounter.load() << " started\n";
     if (lowerBoundary >= upperBoundary) return;
     int pivotIndex = partition(arr, lowerBoundary, upperBoundary);
     if (threadCounter.load() < maxThreads) {
