@@ -17,7 +17,7 @@ private:
     void quicksort(int *arr, int lowerBoundary, int upperBoundary);
     std::function<void()> delayFunction;
     std::atomic<int> threadCounter = 0;
-    int maxThreads = 25;
+    int maxThreads = 2;
     void drawPlot(int *arr, int size);
     void updatePlot(int *arr, int size, sf::RenderWindow &w, int &max);
     bool sortingFinished = false;

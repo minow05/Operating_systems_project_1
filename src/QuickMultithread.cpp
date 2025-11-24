@@ -8,8 +8,8 @@ void QuickMultithread::sort(int *arr, int size) {
     auto start = std::chrono::high_resolution_clock::now();
     quicksort(arr, 0, size - 1);
     auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = stop - start;
-    std::cout << "time = " << static_cast<float>(duration.count())/1000.0 << '\n';
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    std::cout << "time = " << duration.count()/1000.0 << "miliseconds\n";
     sortingFinished = true;
     renderThread.join();
 }
@@ -26,7 +26,7 @@ void QuickMultithread::quicksort(int *arr, int lowerBoundary, int upperBoundary)
         });
         quicksort(arr, pivotIndex + 1, upperBoundary);
         left.join();
-        std::cout << "Thread " << threadCounter.load() << " finished\n";
+        // std::cout << "Thread " << threadCounter.load() << " finished\n";
     } else {
         quicksort(arr, lowerBoundary, pivotIndex - 1);
         quicksort(arr, pivotIndex + 1, upperBoundary);

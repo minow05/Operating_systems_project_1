@@ -87,7 +87,7 @@ public:
     }
 
     void printTime(float sizeFloat){
-        std::cout << "Time: " << static_cast<float>(duration.count())/sizeFloat << " milliseconds\n";
+        std::cout << "Time: " << duration.count()/1000.0 << " milliseconds\n";
     }
 
 protected:

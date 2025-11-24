@@ -5,6 +5,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,10000000")
 
+if(MSVC)
+    # Do not add -fmodules-ts
+else()
+    add_compile_options(-fmodules-ts)
+endif()
+
 include(FetchContent)
 
 FetchContent_Declare(
