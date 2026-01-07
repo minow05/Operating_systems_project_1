@@ -15,7 +15,6 @@ void QuickMultithread::sort(int *arr, int size) {
 }
 
 void QuickMultithread::quicksort(int *arr, int lowerBoundary, int upperBoundary) {
-//    std::cout << "Thread " << threadCounter.load() << " started\n";
     if (lowerBoundary >= upperBoundary) return;
     int pivotIndex = partition(arr, lowerBoundary, upperBoundary);
     if (threadCounter.load() < maxThreads) {
@@ -26,7 +25,6 @@ void QuickMultithread::quicksort(int *arr, int lowerBoundary, int upperBoundary)
         });
         quicksort(arr, pivotIndex + 1, upperBoundary);
         left.join();
-        // std::cout << "Thread " << threadCounter.load() << " finished\n";
     } else {
         quicksort(arr, lowerBoundary, pivotIndex - 1);
         quicksort(arr, pivotIndex + 1, upperBoundary);
@@ -36,9 +34,7 @@ void QuickMultithread::quicksort(int *arr, int lowerBoundary, int upperBoundary)
 int QuickMultithread::partition(int *arr, int lowerBoundary, int upperBoundary) {
     int pivot = lowerBoundary;
     int pivotValue = arr[pivot];
-
-    std::swap(arr[pivot], arr[upperBoundary]);  // Move pivot to end
-
+    std::swap(arr[pivot], arr[upperBoundary]);
     for (int i = lowerBoundary; i < upperBoundary; i++)
     {
         if (arr[i] < pivotValue) {
@@ -47,8 +43,7 @@ int QuickMultithread::partition(int *arr, int lowerBoundary, int upperBoundary) 
             pivot++;
         }
     }
-
-    std::swap(arr[pivot], arr[upperBoundary]);  // Move pivot to correct position
+    std::swap(arr[pivot], arr[upperBoundary]);
     return pivot;
 }
 

@@ -1,15 +1,15 @@
 #include "Algorithms/Quick.h"
 #include "DataGeneration.h"
 #include "../include/QuickMultithread.hpp"
-#define SIZE_OF_ARRAY 100000
+#define SIZE_OF_ARRAY 1000
 
 int main() {
 
     DataGeneration<int> dataGeneration(SIZE_OF_ARRAY);
 
-    Quick quickOne(false);
-    quickOne.sort(dataGeneration.getArray("random"), SIZE_OF_ARRAY);
-    QuickMultithread quick(false);
+    // Quick quickOne(true);
+    // quickOne.sort(dataGeneration.getArray("random"), SIZE_OF_ARRAY);
+    QuickMultithread quick(true);
     quick.sort(dataGeneration.getArray("random"), SIZE_OF_ARRAY);
 
     return 0;
